@@ -4,19 +4,19 @@ import db from './../firebase/firebaseConfig';
 import {doc, deleteDoc, updateDoc} from 'firebase/firestore';
 
 // Como parametros se le pasan los escritos dentro del llamado al componente como {id, nombre, correo} o solo escribe props.nombre_del_atributo
-const Contacto = (props) => {
+const Contacto = ({id, nombre, correo}) => {
     
     const [editandoTarea, cambiarEditandoTarea] = useState(false);
-    const [nombre, cambiarNuevoNombre] = useState(props.nombre);
-    const [correo, cambiarNuevoCorreo] = useState(props.correo);
+    const [nuevoNombre, cambiarNuevoNombre] = useState(nombre);
+    const [nuevoCorreo, cambiarNuevoCorreo] = useState(correo);
     
     const actualizarContacto = async(e) => {
         e.preventDefault();
 
         try {
-            await updateDoc(doc(db, 'usuarios', props.id), {
-                nombre: nombre,
-                correo: correo
+            await updateDoc(doc(db, 'usuarios', id), {
+                nombre: nuevoNombre,
+                correo: nuevoCorreo
             });    
         } catch (error) {
             console.log('Error al intentar actualizar el usuario');
@@ -27,6 +27,16 @@ const Contacto = (props) => {
 
     }
 
+    const eliminarContacto = async(id) => {
+
+        try {
+            await deleteDoc(doc(db, 'usuarios', id));    
+        } catch (error) {
+            console.log('Error al intentar eliminar el usuario');
+            console.log(error);
+        }
+    }
+
     return (
         <ContenedorContacto>
             {editandoTarea ?
@@ -34,14 +44,14 @@ const Contacto = (props) => {
                     <Input 
                         type='text'
                         name='nombre'
-                        value= {nombre}
+                        value= {nuevoNombre}
                         onChange={(e) => cambiarNuevoNombre(e.target.value)}
                         placeholder='Nombre'
                     />
                     <Input 
                         type='text'
                         name='correo'
-                        value= {correo}
+                        value= {nuevoCorreo}
                         onChange={(e) => cambiarNuevoCorreo(e.target.value)}
                         placeholder='Correo'
                     />
@@ -49,10 +59,10 @@ const Contacto = (props) => {
                 </form>
             :
                 <React.Fragment>
-                    <Nombre>{props.nombre}</Nombre>
-                    <Correo>{props.correo}</Correo>
+                    <Nombre>{nombre}</Nombre>
+                    <Correo>{correo}</Correo>
                     <Boton onClick={() => cambiarEditandoTarea(!editandoTarea)}>Editar</Boton>
-                    <Boton>Borrar</Boton>
+                    <Boton onClick={() => eliminarContacto(id)}>Borrar</Boton>
                 </React.Fragment>
             }
 
