@@ -16,6 +16,7 @@ const firebaseConfig = {
   appId: "1:854941691975:web:b646a13163407aad490162"
 };
 
+//Congiguracion para tomar las claves desde la variable de entorno que debes crear, solo descomenta el import
 /* const firebaseConfig = {
   apiKey: import.meta.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: import.meta.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
